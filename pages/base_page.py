@@ -26,3 +26,14 @@ class BasePage:
     def get_text_from_element_with_wait(self, locator):
         WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located(locator))
         return self.find_element_with_wait(locator).text
+
+    @allure.step('Пркручиваем страницу до элемента {locator} и кликаем по нему')
+    def scroll_and_click_to_element(self, locator):
+        self.driver.execute_script("arguments[0].scrollIntoView();", self.find_element_with_wait(locator))
+        self.click_to_element_with_wait(locator)
+
+    @allure.step('Переключаемся на новую вкладку браузера')
+    def switch_to_window_and_wait_for_load(self, locator):
+        self.driver.switch_to.window(self.driver.window_handles[1])
+        WebDriverWait(self.driver, 10).until(expected_conditions.
+                                             presence_of_element_located(locator))
